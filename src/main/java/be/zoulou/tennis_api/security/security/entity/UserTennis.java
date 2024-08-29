@@ -1,4 +1,4 @@
-package security.security.entity;
+package be.zoulou.tennis_api.security.security.entity;
 
 import jakarta.persistence.*;
 
