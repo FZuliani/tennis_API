@@ -2,7 +2,9 @@ package be.zoulou.tennis_api.security.security.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter
 @Getter
 @Entity
 @Table(name = "user_tennis")
@@ -23,26 +25,6 @@ public class UserTennis {
 
     @Column(nullable = false, length = 64)
     private String oldPassword;
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
-    }
 
     public UserTennis() {
     }

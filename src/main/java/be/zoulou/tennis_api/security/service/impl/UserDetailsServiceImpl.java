@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    @Autowired
+    @Autowired()
     public PasswordEncoder passwordEncoder;
 
     @Value("{spring.app.jwtSecret}")
@@ -25,7 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        final UserTennis userTennis = this.repository.findByUserName(username);
+        final UserTennis userTennis = this.repository.findByUsername(username);
         if(userTennis == null) {
             throw new UsernameNotFoundException("User not found");
         }
