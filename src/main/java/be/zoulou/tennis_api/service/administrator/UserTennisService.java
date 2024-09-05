@@ -73,4 +73,8 @@ public class UserTennisService {
         userTennisToEdit.setOldPassword(userTennis.getOldPassword());
         return userTennisToEdit;
     }
+
+    public UserTennis getUserTennisByUsername(String username) {
+        return userTennisRepository.findByUsername(username);
+    }
 }
