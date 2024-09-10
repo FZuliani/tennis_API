@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springdoc.core.service.RequestBodyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,11 +29,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     //logger
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+    @Autowired
+    private RequestBodyService requestBodyBuilder;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         System.out.println(userDetailsService != null ? "userDetailsService is injected" : "userDetailsService is null");
-
+    //get the password from the request
         logger.debug("AuthTokenFilter called for URI : {}", request.getRequestURI());
 
         try{

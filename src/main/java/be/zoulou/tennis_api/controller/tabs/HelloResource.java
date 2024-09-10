@@ -44,7 +44,7 @@ public class HelloResource {
         return "Welcome to TennisBE API (admin)";
     }
 
-    @PostMapping("/signing")
+    @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest){
         Authentication authentication;
         try {
@@ -52,6 +52,7 @@ public class HelloResource {
                     loginRequest.getUsername(),
                     loginRequest.getPassword()
             ));
+
         }catch (AuthenticationException e){
             Map<String, Object> map = new HashMap<>();
             map.put("message", "Bad credentials");

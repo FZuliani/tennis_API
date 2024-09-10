@@ -4,6 +4,7 @@ import be.zoulou.tennis_api.exceptions.IdNotFoundException;
 import be.zoulou.tennis_api.exceptions.UserTennisNotFoundException;
 import be.zoulou.tennis_api.model.administrator.UserTennis;
 import be.zoulou.tennis_api.repository.administrator.UserTennisRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,9 @@ public class UserTennisService {
     private final UserTennisRepository userTennisRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Autowired
     public UserTennisService(UserTennisRepository userTennisRepository, PasswordEncoder passwordEncoder) {
+        System.out.println("blabla : " + passwordEncoder.encode("admin"));
         this.userTennisRepository = userTennisRepository;
         this.passwordEncoder = passwordEncoder;
     }
