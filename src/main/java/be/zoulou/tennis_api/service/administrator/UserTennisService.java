@@ -20,7 +20,6 @@ public class UserTennisService {
 
     @Autowired
     public UserTennisService(UserTennisRepository userTennisRepository, PasswordEncoder passwordEncoder) {
-        System.out.println("blabla : " + passwordEncoder.encode("admin"));
         this.userTennisRepository = userTennisRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -38,17 +37,6 @@ public class UserTennisService {
 
     public UserTennis getUserTennisById(Long id){
         return userTennisRepository.findById(id).orElseThrow(() -> new IdNotFoundException(id, "UserTennis"));
-    }
-
-    public UserTennis getUserTennisByUserName(String username){
-        System.out.println(userTennisRepository != null ?
-                                                "UserTennisRepository is injected" : "UserTennisRepository is null");
-
-        UserTennis userTennis = userTennisRepository.findByUsername(username);
-        if(userTennis == null){
-            throw new UserTennisNotFoundException(username);
-        }
-        return userTennis;
     }
 
     public UserTennis getUserTennisByEmail(String email){
@@ -74,6 +62,7 @@ public class UserTennisService {
         userTennisToEdit.setUsername(userTennis.getUsername());
         userTennisToEdit.setPassword(passwordEncoder.encode(userTennis.getPassword()));
         userTennisToEdit.setOldPassword(userTennis.getOldPassword());
+        userTennisRepository.save(userTennisToEdit);
         return userTennisToEdit;
     }
 
