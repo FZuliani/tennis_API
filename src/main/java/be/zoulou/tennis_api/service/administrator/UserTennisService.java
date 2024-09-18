@@ -60,8 +60,8 @@ public class UserTennisService {
         UserTennis userTennisToEdit = getUserTennisById(id);
         userTennisToEdit.setEmail(userTennis.getEmail());
         userTennisToEdit.setUsername(userTennis.getUsername());
-        userTennisToEdit.setPassword(passwordEncoder.encode(userTennis.getPassword()));
         userTennisToEdit.setOldPassword(userTennis.getOldPassword());
+        userTennisToEdit.setPassword(passwordEncoder.encode(userTennis.getPassword()));
         userTennisRepository.save(userTennisToEdit);
         return userTennisToEdit;
     }
