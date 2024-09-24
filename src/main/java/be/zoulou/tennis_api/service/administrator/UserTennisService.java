@@ -52,7 +52,8 @@ public class UserTennisService {
 
     public UserTennis deleteUserTennis(Long id){
         UserTennis userTennis = getUserTennisById(id);
-        userTennisRepository.delete(userTennis);
+        userTennis.setActif(!userTennis.isActif());
+        userTennisRepository.save(userTennis);
         return userTennis;
     }
 

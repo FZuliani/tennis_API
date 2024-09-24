@@ -28,6 +28,9 @@ public class UserTennis {
     @Column(nullable = false, length = 64)
     private String oldPassword;
 
+    @Column(nullable = false)
+    private boolean actif;
+
 
     public static UserTennis from(UserTennisDto userTennisDto) {
         UserTennis userTennis = new UserTennis();
@@ -36,6 +39,7 @@ public class UserTennis {
         userTennis.setPassword(userTennisDto.getPassword());
         userTennis.setUsername(userTennisDto.getUsername());
         userTennis.setOldPassword(userTennisDto.getOldPassword());
+        userTennis.setActif(userTennisDto.isActif());
         return userTennis;
     }
 }

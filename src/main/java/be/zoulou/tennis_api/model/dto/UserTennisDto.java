@@ -11,6 +11,7 @@ public class UserTennisDto {
     private String email;
     private String password;
     private String oldPassword;
+    private boolean actif;
 
     public static UserTennisDto from(UserTennis userTennis) {
         UserTennisDto userTennisDto = new UserTennisDto();
@@ -19,6 +20,7 @@ public class UserTennisDto {
         userTennisDto.setEmail(userTennis.getEmail());
         userTennisDto.setPassword(userTennis.getPassword());
         userTennisDto.setOldPassword(userTennis.getOldPassword());
+        userTennisDto.setActif(userTennis.isActif());
         return userTennisDto;
     }
 }
