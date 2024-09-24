@@ -4,6 +4,8 @@ import be.zoulou.tennis_api.model.dto.UserTennisDto;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @Builder
 @Entity
@@ -31,6 +33,13 @@ public class UserTennis {
     @Column(nullable = false)
     private boolean actif;
 
+    @ManyToMany
+    @JoinTable(name = "user_roles")
+    private List<Role> roles;
+
+    public void addRole(Role role){
+        roles.add(role);
+    }
 
     public static UserTennis from(UserTennisDto userTennisDto) {
         UserTennis userTennis = new UserTennis();
@@ -40,6 +49,7 @@ public class UserTennis {
         userTennis.setUsername(userTennisDto.getUsername());
         userTennis.setOldPassword(userTennisDto.getOldPassword());
         userTennis.setActif(userTennisDto.isActif());
+        userTennis.setRoles(userTennisDto.getRolesDto().stream().map(Role::from).toList());
         return userTennis;
     }
 }

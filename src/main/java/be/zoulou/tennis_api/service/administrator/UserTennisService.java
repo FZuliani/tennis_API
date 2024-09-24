@@ -4,6 +4,7 @@ import be.zoulou.tennis_api.exceptions.IdNotFoundException;
 import be.zoulou.tennis_api.exceptions.UserTennisNotFoundException;
 import be.zoulou.tennis_api.model.administrator.UserTennis;
 import be.zoulou.tennis_api.repository.administrator.UserTennisRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -69,5 +70,19 @@ public class UserTennisService {
 
     public UserTennis getUserTennisByUsername(String username) {
         return userTennisRepository.findByUsername(username);
+    }
+
+    @Transactional
+    public UserTennis addRoleToUserTennis(Long idUserTennis, Long idRole){
+        UserTennis userTennis = getUserTennisById(idUserTennis);
+        userTennis.addRole(roleService.getRoleById(idRole));
+        return userTennis;
+    }
+
+    @Transactional
+    public UserTennis removeRoleFromUserTennis(Long idUserTennis, Long idRole){
+        UserTennis userTennis = getUserTennisById(idUserTennis);
+        userTennis.getRoles().remove(roleService.getRoleById(idRole));
+        return userTennis;
     }
 }
