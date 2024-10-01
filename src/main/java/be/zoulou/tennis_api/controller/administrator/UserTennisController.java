@@ -83,4 +83,16 @@ public class UserTennisController {
         return ResponseEntity.ok(userTennisDtos);
     }
 
+    @PostMapping("/user/{idUserTennis}/role/{idRole}/add")
+    public ResponseEntity<UserTennisDto> addRoleToUser(@PathVariable final Long idUserTennis, @PathVariable final Long idRole){
+        UserTennis userTennis = userTennisService.addRoleToUserTennis(idUserTennis, idRole);
+        return ResponseEntity.ok(UserTennisDto.from(userTennis));
+    }
+
+    @DeleteMapping("/user/{idUserTennis}/role/{idRole}/remove")
+    public ResponseEntity<UserTennisDto> removeRoleFromUser(@PathVariable final Long idUserTennis, @PathVariable final Long idRole){
+        UserTennis userTennis = userTennisService.removeRoleFromUserTennis(idUserTennis, idRole);
+        return ResponseEntity.ok(UserTennisDto.from(userTennis));
+    }
+
 }

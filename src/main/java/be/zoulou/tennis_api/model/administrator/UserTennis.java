@@ -41,6 +41,10 @@ public class UserTennis {
         roles.add(role);
     }
 
+    public void removeRole(Role role){
+        roles.remove(role);
+    }
+
     public static UserTennis from(UserTennisDto userTennisDto) {
         UserTennis userTennis = new UserTennis();
        //userTennis.setId(userTennisDto.getId());
@@ -49,7 +53,7 @@ public class UserTennis {
         userTennis.setUsername(userTennisDto.getUsername());
         userTennis.setOldPassword(userTennisDto.getOldPassword());
         userTennis.setActif(userTennisDto.isActif());
-        userTennis.setRoles(userTennisDto.getRolesDto().stream().map(Role::from).toList());
+        userTennis.setRoles(userTennisDto.getRoles().stream().map(Role::from).toList());
         return userTennis;
     }
 }

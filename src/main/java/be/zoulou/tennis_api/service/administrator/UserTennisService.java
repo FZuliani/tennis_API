@@ -18,11 +18,13 @@ public class UserTennisService {
 
     private final UserTennisRepository userTennisRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
 
     @Autowired
-    public UserTennisService(UserTennisRepository userTennisRepository, PasswordEncoder passwordEncoder) {
+    public UserTennisService(UserTennisRepository userTennisRepository, PasswordEncoder passwordEncoder, RoleService roleService) {
         this.userTennisRepository = userTennisRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleService = roleService;
     }
 
     public UserTennis addUserTennis(UserTennis userTennis){
@@ -82,7 +84,7 @@ public class UserTennisService {
     @Transactional
     public UserTennis removeRoleFromUserTennis(Long idUserTennis, Long idRole){
         UserTennis userTennis = getUserTennisById(idUserTennis);
-        userTennis.getRoles().remove(roleService.getRoleById(idRole));
+        userTennis.removeRole(roleService.getRoleById(idRole));
         return userTennis;
     }
 }
