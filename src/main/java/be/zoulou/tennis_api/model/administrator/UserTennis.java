@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -33,17 +35,10 @@ public class UserTennis {
     @Column(nullable = false)
     private boolean actif;
 
+    @Setter
     @ManyToMany
     @JoinTable(name = "user_roles")
-    private List<Role> roles;
-
-    public void addRole(Role role){
-        roles.add(role);
-    }
-
-    public void removeRole(Role role){
-        roles.remove(role);
-    }
+    private Set<Role> roles;
 
     public static UserTennis from(UserTennisDto userTennisDto) {
         UserTennis userTennis = new UserTennis();
@@ -53,7 +48,7 @@ public class UserTennis {
         userTennis.setUsername(userTennisDto.getUsername());
         userTennis.setOldPassword(userTennisDto.getOldPassword());
         userTennis.setActif(userTennisDto.isActif());
-        userTennis.setRoles(userTennisDto.getRoles().stream().map(Role::from).toList());
+        userTennis.setRoles(userTennisDto.getRoles().stream().map(Role::from).collect(Collectors.toSet()));
         return userTennis;
     }
 }

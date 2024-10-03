@@ -7,13 +7,16 @@ import lombok.Data;
 @Data
 public class RoleDto {
 
-        private Long id;
-        private String name;
+    private Long id;
+    private String name;
 
-        public static RoleDto from (Role role){
-            RoleDto roleDto = new RoleDto();
-            roleDto.setId(role.getId());
-            roleDto.setName(role.getName());
-            return roleDto;
+    public static RoleDto from (Role role){
+        if (role == null){
+            return null;
         }
+        RoleDto roleDto = new RoleDto();
+        roleDto.setId(role.getId());
+        roleDto.setName(role.getName());
+        return roleDto;
+    }
 }

@@ -2,6 +2,7 @@ package be.zoulou.tennis_api.service.administrator;
 
 import be.zoulou.tennis_api.exceptions.IdNotFoundException;
 import be.zoulou.tennis_api.exceptions.UserTennisNotFoundException;
+import be.zoulou.tennis_api.model.administrator.Role;
 import be.zoulou.tennis_api.model.administrator.UserTennis;
 import be.zoulou.tennis_api.repository.administrator.UserTennisRepository;
 import jakarta.transaction.Transactional;
@@ -55,36 +56,24 @@ public class UserTennisService {
 
     public UserTennis deleteUserTennis(Long id){
         UserTennis userTennis = getUserTennisById(id);
-        userTennis.setActif(!userTennis.isActif());
+        userTennis.setActif(false);
         userTennisRepository.save(userTennis);
         return userTennis;
     }
 
+    @Transactional
     public UserTennis editUserTennis(Long id, UserTennis userTennis){
         UserTennis userTennisToEdit = getUserTennisById(id);
         userTennisToEdit.setEmail(userTennis.getEmail());
         userTennisToEdit.setUsername(userTennis.getUsername());
-        userTennisToEdit.setOldPassword(userTennis.getOldPassword());
-        userTennisToEdit.setPassword(passwordEncoder.encode(userTennis.getPassword()));
+        //userTennisToEdit.setOldPassword(userTennis.getOldPassword());
+        //userTennisToEdit.setPassword(passwordEncoder.encode(userTennis.getPassword()));
+        userTennisToEdit.setRoles(userTennis.getRoles());
         userTennisRepository.save(userTennisToEdit);
         return userTennisToEdit;
     }
 
     public UserTennis getUserTennisByUsername(String username) {
         return userTennisRepository.findByUsername(username);
-    }
-
-    @Transactional
-    public UserTennis addRoleToUserTennis(Long idUserTennis, Long idRole){
-        UserTennis userTennis = getUserTennisById(idUserTennis);
-        userTennis.addRole(roleService.getRoleById(idRole));
-        return userTennis;
-    }
-
-    @Transactional
-    public UserTennis removeRoleFromUserTennis(Long idUserTennis, Long idRole){
-        UserTennis userTennis = getUserTennisById(idUserTennis);
-        userTennis.removeRole(roleService.getRoleById(idRole));
-        return userTennis;
     }
 }

@@ -1,6 +1,7 @@
 package be.zoulou.tennis_api.controller.administrator;
 
 import be.zoulou.tennis_api.exceptions.UserTennisNotFoundException;
+import be.zoulou.tennis_api.model.administrator.Role;
 import be.zoulou.tennis_api.model.administrator.UserTennis;
 import be.zoulou.tennis_api.model.dto.UserTennisDto;
 import be.zoulou.tennis_api.service.administrator.UserTennisService;
@@ -50,7 +51,6 @@ public class UserTennisController {
         return ResponseEntity.ok(UserTennisDto.from(userTennis));
     }
 
-
     @GetMapping("/user/userName/{username}")
     public ResponseEntity<UserTennisDto> getUserTennisByUsername(@PathVariable final String username){
         UserTennis userTennis = userTennisService.getUserTennisByUsername(username);
@@ -82,17 +82,4 @@ public class UserTennisController {
 
         return ResponseEntity.ok(userTennisDtos);
     }
-
-    @PostMapping("/user/{idUserTennis}/role/{idRole}/add")
-    public ResponseEntity<UserTennisDto> addRoleToUser(@PathVariable final Long idUserTennis, @PathVariable final Long idRole){
-        UserTennis userTennis = userTennisService.addRoleToUserTennis(idUserTennis, idRole);
-        return ResponseEntity.ok(UserTennisDto.from(userTennis));
-    }
-
-    @DeleteMapping("/user/{idUserTennis}/role/{idRole}/remove")
-    public ResponseEntity<UserTennisDto> removeRoleFromUser(@PathVariable final Long idUserTennis, @PathVariable final Long idRole){
-        UserTennis userTennis = userTennisService.removeRoleFromUserTennis(idUserTennis, idRole);
-        return ResponseEntity.ok(UserTennisDto.from(userTennis));
-    }
-
 }
