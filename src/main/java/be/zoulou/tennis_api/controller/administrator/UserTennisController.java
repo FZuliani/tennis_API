@@ -46,7 +46,8 @@ public class UserTennisController {
     }
 
     @PutMapping("/user/{id}")
-    public ResponseEntity<UserTennisDto> editUserTennis(@PathVariable final Long id, @RequestBody final UserTennisDto userTennisDTO){
+    public ResponseEntity<UserTennisDto> editUserTennis(@PathVariable final Long id,
+                                                        @RequestBody final UserTennisDto userTennisDTO){
         UserTennis userTennis = userTennisService.editUserTennis(id, UserTennis.from(userTennisDTO));
         return ResponseEntity.ok(UserTennisDto.from(userTennis));
     }
