@@ -22,4 +22,8 @@ public class TennisCourtService {
         return StreamSupport.stream(courtTennisRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
     }
+
+    public TennisCourt getTennisCourtById(Long id) {
+        return courtTennisRepository.findById(id).orElse(null);
+    }
 }
