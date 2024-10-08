@@ -23,6 +23,10 @@ public class TennisCourtService {
                 .collect(Collectors.toList());
     }
 
+    public TennisCourt addTennisCourt(TennisCourt tennisCourt) {
+        return courtTennisRepository.save(tennisCourt);
+    }
+
     public TennisCourt getTennisCourtById(Long id) {
         return courtTennisRepository.findById(id).orElse(null);
     }

@@ -1,6 +1,7 @@
 package be.zoulou.tennis_api.model.tabs;
 
 
+import be.zoulou.tennis_api.model.dto.TennisCourtDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -37,4 +38,14 @@ public class TennisCourt {
     @Setter
     @Column(nullable = false, length = 240)
     public String imageProfile;
+
+    public static TennisCourt from(TennisCourtDto tennisCourtDto){
+        return TennisCourt.builder()
+                .id(tennisCourtDto.getId())
+                .type_court(tennisCourtDto.getType_court())
+                .isIndoor(tennisCourtDto.isIndoor())
+                .name(tennisCourtDto.getName())
+                .imageProfile(tennisCourtDto.getImage_profile())
+                .build();
+    }
 }

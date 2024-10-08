@@ -6,14 +6,13 @@ import lombok.Data;
 @Data
 public class TennisCourtDto {
 
-
     private Long id;
     private String name;
     private String type_court;
     private boolean isIndoor;
     private String image_profile;
 
-    public static TennisCourtDto from (TennisCourt tennisCourt){
+    public static TennisCourtDto from(TennisCourt tennisCourt){
         if (tennisCourt == null){
             return null;
         }
