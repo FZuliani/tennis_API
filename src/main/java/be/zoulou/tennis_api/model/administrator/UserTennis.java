@@ -40,6 +40,7 @@ public class UserTennis {
     @JoinTable(name = "user_roles")
     private Set<Role> roles;
 
+
     public static UserTennis from(UserTennisDto userTennisDto) {
         UserTennis userTennis = new UserTennis();
        //userTennis.setId(userTennisDto.getId());

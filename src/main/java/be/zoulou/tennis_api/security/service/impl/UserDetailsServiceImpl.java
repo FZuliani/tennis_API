@@ -1,4 +1,5 @@
 package be.zoulou.tennis_api.security.service.impl;
+import be.zoulou.tennis_api.model.administrator.Role;
 import be.zoulou.tennis_api.model.administrator.UserTennis;
 import be.zoulou.tennis_api.security.security.repository.UserRepository;
 import be.zoulou.tennis_api.service.administrator.UserTennisService;
@@ -6,12 +7,16 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -35,25 +40,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         System.out.println(userTennisService != null ?
                 "UserTennisService is injected" : "UserTennisService is null");
 
+        assert userTennisService != null;
         UserTennis userTennis = userTennisService.getUserTennisByUsername(username);
         if(userTennis == null) {
             throw new UsernameNotFoundException("Unknown user "+ username);
         }
 
-        // System.out.println("userScore: " + userScore.getUsername() +
-        //         " - " + userScore.getPassword() +
-        //         " - " + userScore.getRoles()
-        // );
-
-        System.out.println("password encrypted:" +
-                passwordEncoder.encode(userTennis.getPassword()));
-
-        //List<Role> roleList = userScore.getRoles();
-        //Set<Role> roles = getRoles(roleList);
+        Set<Role> roles = userTennis.getRoles();
 
         return User.withUsername(userTennis.getUsername())
                 .password(userTennis.getPassword())
-                //.authorities(getAuthorities(roles, userScore))
+                .authorities(getAuthorities(roles, userTennis))
                 .accountExpired(false)
                 .accountLocked(false)
                 .credentialsExpired(false)
@@ -61,35 +58,32 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .build();
     }
 
-    /*    public Collection<? extends GrantedAuthority> getAuthorities(Set<Role> roleSet, UserScore userScore)
-        {
-            List<Role> roleList = userScore.getRoles();
-            Set<Role> roles = getRoles(roleList);
+    public Collection<? extends GrantedAuthority> getAuthorities(Set<Role> roleSet, UserTennis userTennis)
+    {
+        Set<Role> roles = userTennis.getRoles();
 
-            List<GrantedAuthority> authList = getGrantedAuthorities(roles, userScore);
-            return authList;
-        }
-    */
-    public static String getUserId(UserTennis userTennis) {
-        String theId = Long.toString(userTennis.getId());
-        return theId;
+        return getGrantedAuthorities(roles, userTennis);
     }
-/*
+
+    public static String getUserId(UserTennis userTennis) {
+        return Long.toString(userTennis.getId());
+    }
+
     public Set<Role> getRoles(List<Role> roleList) {
         return new HashSet<>(roleList);
     }
 
-    public static List<GrantedAuthority> getGrantedAuthorities(Set<Role> roles, UserScore userScore) {
+    public static List<GrantedAuthority> getGrantedAuthorities(Set<Role> roles, UserTennis userTennis) {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
         for (Role role : roles) {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         }
 
-        authorities.add(new SimpleGrantedAuthority(getUserId(userScore)));
+        authorities.add(new SimpleGrantedAuthority(getUserId(userTennis)));
 
         return authorities;
     }
-*/
+
 }
 
