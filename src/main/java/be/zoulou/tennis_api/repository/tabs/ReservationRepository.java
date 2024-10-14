@@ -13,4 +13,5 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
     Reservation findByHour(String hour);
     Reservation findByTennisCourtId(Long tennisCourtId);
     Reservation findByUserTennisId(Long userTennisID);
+    Reservation findByDateAndHourAndTennisCourtId(String date, String hour, Long tennisCourtId);
 }

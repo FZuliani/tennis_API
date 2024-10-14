@@ -34,8 +34,14 @@ public class ReservationService {
         return reservationRepository.findByUserTennisId(userTennisID);
     }
 
-    public Reservation addReservation(Reservation reservation) {
-        return reservationRepository.save(reservation);
+    public boolean addReservation(Reservation reservation) {
+        //check if the reservation is already taken
+        Reservation reservation1 = reservationRepository.findByDateAndHourAndTennisCourtId(reservation.getDate(), reservation.getHour(), reservation.getTennisCourtId());
+        if (reservation1 != null) {
+            return false;
+        }
+        reservationRepository.save(reservation);
+        return true;
     }
 
     public Reservation getReservationById(Long id) {

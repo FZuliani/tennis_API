@@ -1,6 +1,8 @@
 package be.zoulou.tennis_api.security.service.impl;
 import be.zoulou.tennis_api.model.administrator.Role;
 import be.zoulou.tennis_api.model.administrator.UserTennis;
+import be.zoulou.tennis_api.repository.administrator.UserTennisRepository;
+import be.zoulou.tennis_api.security.security.models.UserDetailsCustom;
 import be.zoulou.tennis_api.security.security.repository.UserRepository;
 import be.zoulou.tennis_api.service.administrator.UserTennisService;
 import jakarta.transaction.Transactional;
@@ -17,45 +19,43 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     public PasswordEncoder passwordEncoder;
     private final UserTennisService userTennisService;
+    @Autowired
+    private UserTennisRepository userTennisRepository;
 
     @Value("${spring.app.jwtSecret}")
     private String jwtSecret;
 
     @Autowired
     public UserDetailsServiceImpl(UserTennisService userTennisService,
-                                  PasswordEncoder passwordEncoder) {
+                                  PasswordEncoder passwordEncoder,
+                                  UserTennisRepository userTennisRepository) {
         this.userTennisService = userTennisService;
         this.passwordEncoder = passwordEncoder;
+        this.userTennisRepository = userTennisRepository;
     }
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username)
-            throws UsernameNotFoundException {
-        System.out.println(userTennisService != null ?
-                "UserTennisService is injected" : "UserTennisService is null");
-
-        assert userTennisService != null;
-        UserTennis userTennis = userTennisService.getUserTennisByUsername(username);
-        if(userTennis == null) {
-            throw new UsernameNotFoundException("Unknown user "+ username);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserTennis user = userTennisRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with username: " + username);
         }
 
-        Set<Role> roles = userTennis.getRoles();
-
-        return User.withUsername(userTennis.getUsername())
-                .password(userTennis.getPassword())
-                .authorities(getAuthorities(roles, userTennis))
-                .accountExpired(false)
-                .accountLocked(false)
-                .credentialsExpired(false)
-                .disabled(false)
-                .build();
+        return new UserDetailsCustom(
+                user.getId(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getRoles().stream()
+                        .map(role -> new SimpleGrantedAuthority(role.getName()))
+                        .collect(Collectors.toList())
+        );
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities(Set<Role> roleSet, UserTennis userTennis)
@@ -77,7 +77,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
         for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
+            authorities.add(new SimpleGrantedAuthority( "ROLE_" + role.getName()));
         }
 
         authorities.add(new SimpleGrantedAuthority(getUserId(userTennis)));

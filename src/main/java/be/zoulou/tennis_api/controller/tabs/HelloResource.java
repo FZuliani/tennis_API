@@ -4,6 +4,7 @@ import be.zoulou.tennis_api.model.administrator.UserTennis;
 import be.zoulou.tennis_api.security.security.jwt.JwtUtils;
 import be.zoulou.tennis_api.security.security.jwt.LoginRequest;
 import be.zoulou.tennis_api.security.security.jwt.LoginResponse;
+import be.zoulou.tennis_api.security.security.models.UserDetailsCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,27 +55,25 @@ public class HelloResource {
                     loginRequest.getUsername(),
                     loginRequest.getPassword()
             ));
-
-        }catch (AuthenticationException e){
+        } catch (AuthenticationException e) {
             Map<String, Object> map = new HashMap<>();
             map.put("message", "Bad credentials");
             map.put("status", false);
-            return new ResponseEntity<Object>(map, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
         }
-
-
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserDetailsCustom userDetails = (UserDetailsCustom) authentication.getPrincipal();
+        Long userId = userDetails.getUserId();
 
         String jwtToken = jwtUtils.generateTokenFromUsername(userDetails);
 
-        List<String> roles =  userDetails.getAuthorities().stream()
+        List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        LoginResponse response = new LoginResponse(jwtToken, userDetails.getUsername(), roles);
+        LoginResponse response = new LoginResponse(jwtToken, userDetails.getUsername(), roles, userId);
 
         return ResponseEntity.ok(response);
     }

@@ -2,7 +2,6 @@ package be.zoulou.tennis_api.service.administrator;
 
 import be.zoulou.tennis_api.exceptions.IdNotFoundException;
 import be.zoulou.tennis_api.exceptions.UserTennisNotFoundException;
-import be.zoulou.tennis_api.model.administrator.Role;
 import be.zoulou.tennis_api.model.administrator.UserTennis;
 import be.zoulou.tennis_api.repository.administrator.UserTennisRepository;
 import jakarta.transaction.Transactional;

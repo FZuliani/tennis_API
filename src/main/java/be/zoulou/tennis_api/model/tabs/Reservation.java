@@ -6,7 +6,9 @@ import be.zoulou.tennis_api.model.dto.ReservationDto;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -31,20 +33,23 @@ public class Reservation {
     @Column(nullable = false)
     private String hour;
 
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    private Long tennisCourtId;
 
-    @ManyToOne
-    private TennisCourt tennisCourt;
-
-    @ManyToOne
-    private UserTennis userTennis;
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    private Long userTennisId;
 
     public static Reservation from(ReservationDto reservationDto){
         return Reservation.builder()
                 .id(reservationDto.getId())
                 .date(reservationDto.getDate())
                 .hour(reservationDto.getHour())
-                .tennisCourt(TennisCourt.from(reservationDto.getTennisCourt()))
-                .userTennis(UserTennis.from(reservationDto.getUserTennis()))
+                .tennisCourtId(reservationDto.getTennisCourtId())
+                .userTennisId(reservationDto.getUserTennisId())
                 .build();
     }
 }

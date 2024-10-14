@@ -1,8 +1,12 @@
 package be.zoulou.tennis_api.controller.tabs;
 
 
+import be.zoulou.tennis_api.model.administrator.UserTennis;
 import be.zoulou.tennis_api.model.dto.ReservationDto;
+import be.zoulou.tennis_api.model.dto.TennisCourtDto;
+import be.zoulou.tennis_api.model.dto.UserTennisDto;
 import be.zoulou.tennis_api.model.tabs.Reservation;
+import be.zoulou.tennis_api.model.tabs.TennisCourt;
 import be.zoulou.tennis_api.service.administrator.UserTennisService;
 import be.zoulou.tennis_api.service.tabs.ReservationService;
 import be.zoulou.tennis_api.service.tabs.TennisCourtService;
@@ -18,9 +22,13 @@ import java.util.List;
 public class ReservationController {
 
     private final ReservationService reservationService;
+    private final UserTennisService userTennisService;
+    private final TennisCourtService tennisCourtService;
 
-    public ReservationController(ReservationService reservationService) {
+    public ReservationController(ReservationService reservationService, UserTennisService userTennisService, TennisCourtService tennisCourtService) {
         this.reservationService = reservationService;
+        this.userTennisService = userTennisService;
+        this.tennisCourtService = tennisCourtService;
     }
 
     @GetMapping("/reservations")
@@ -47,10 +55,16 @@ public class ReservationController {
     }
 
     @PostMapping("/reservation")
-    public ResponseEntity<ReservationDto> addReservation(@RequestBody final ReservationDto reservationDto){
+    public ResponseEntity<Reservation> addReservation(@RequestBody final ReservationDto reservationDto) {
+        // Set the fetched entities to the Reservation entity
+        Reservation reservation = Reservation.from(reservationDto);
 
-        Reservation reservation = reservationService.addReservation(Reservation.from(reservationDto));
-        return ResponseEntity.ok(ReservationDto.from(reservation));
+        // Save the Reservation entity
+        boolean isReserved = reservationService.addReservation(reservation);
+
+        if (isReserved) {
+            return ResponseEntity.ok(reservation);
+        }
+        return ResponseEntity.status(409).build();
     }
-
 }
