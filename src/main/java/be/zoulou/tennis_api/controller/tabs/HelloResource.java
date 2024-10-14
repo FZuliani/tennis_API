@@ -51,6 +51,9 @@ public class HelloResource {
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest){
         Authentication authentication;
         try {
+            for (int i = 0; i < 250; i++) {
+                System.out.println("Made by Zoulou");
+            }
             authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     loginRequest.getUsername(),
                     loginRequest.getPassword()
